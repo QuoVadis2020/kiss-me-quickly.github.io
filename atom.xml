@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kiss-me-quickly.github.io/</id>
     <title>mirror</title>
-    <updated>2020-03-15T08:15:16.229Z</updated>
+    <updated>2020-03-15T08:37:10.228Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kiss-me-quickly.github.io/"/>
     <link rel="self" href="https://kiss-me-quickly.github.io/atom.xml"/>
@@ -10,6 +10,53 @@
     <logo>https://kiss-me-quickly.github.io/images/avatar.png</logo>
     <icon>https://kiss-me-quickly.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, mirror</rights>
+    <entry>
+        <title type="html"><![CDATA[手写bind]]></title>
+        <id>https://kiss-me-quickly.github.io/post/shou-xie-bind/</id>
+        <link href="https://kiss-me-quickly.github.io/post/shou-xie-bind/">
+        </link>
+        <updated>2020-03-15T08:18:00.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="初级版es6写法">初级版<strong>es6写法</strong></h2>
+<pre><code class="language-JavaScript">function bind(asThis,...args){
+    const fn = this;
+    return function(...args2){
+        return fn.call(asThis,...args,...args2);
+    }
+}
+</code></pre>
+<h2 id="进阶版es5写法">进阶版<strong>es5写法</strong></h2>
+<p>相比es6中要解决const,以及三点运算符,于是使用var 替代const,slice与arguments结合替代...args</p>
+<pre><code class="language-JavaScript">var slice = Array.prototype.slice;
+function bind(asThis){
+    var fn = this;
+    var args = slice.call(arguments,1);
+    if(fm !== 'function){
+        throw new Error('bind 必须调用在函数上');
+    }
+    return function(){
+        var args2 = slice.call(arguments,0);
+        return fn.call(asThis,args.concat(args2);
+    }
+}
+</code></pre>
+<h2 id="最终版支持new">最终版<strong>支持new</strong></h2>
+<pre><code>我们知道new做了四个步骤:
+1. var temp = {}
+2.temp.__proto__ = fn.prototype
+3.fn.call(temp,...args)
+4.在fn最后一行中添加 return this
+</code></pre>
+<pre><code class="language-JavaScript">function bind(asThis,...args){
+    const fn = this;
+    return resultFn(...args2){
+        return fn.call(this instanceof resultFn ? this : asThis,...args,...args2);
+    }
+    resultFn.prototype = fn.prototype
+    return resultFn
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://kiss-me-quickly.github.io/post/hello-gridea/</id>
