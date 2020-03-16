@@ -2,23 +2,18 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | mirror</title>
+<title>Eventhub | mirror</title>
 <link rel="shortcut icon" href="https://kiss-me-quickly.github.io//favicon.ico?v=1584328583210">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://kiss-me-quickly.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="关于 | mirror - Atom Feed" href="https://kiss-me-quickly.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Eventhub | mirror - Atom Feed" href="https://kiss-me-quickly.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-欢迎来到我的小站呀，很高兴遇见你！🤝
-
-🏠 关于本站
-👨‍💻 博主是谁
-⛹ 兴趣爱好
-📬 联系我呀
-..." />
+    <meta name="description" content="const ele = document.getElementById('selector')
+ele.addEventListener('click',() =&gt; console.log('click'))
+// 可以订阅多个相同事..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -81,46 +76,103 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              Eventhub
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2019-11-19
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+                <pre><code class="language-javascript">const ele = document.getElementById('selector')
+ele.addEventListener('click',() =&gt; console.log('click'))
+// 可以订阅多个相同事件
+ele.addEventListener('click',() =&gt; console.log('click2'))
+// 可以取消订阅，这里必须要使用与订阅时相同的函数
+ele.removeEventListener('click',handler)
+</code></pre>
+<p>上边的代码其实就是发布订阅模式，我们可以订阅DOM元素的一些事件，当用户执行相应的操作时会发布事件。当然我们也可以手动来取消对事件的订阅。</p>
+<p>不仅仅在操作DOM的时候我们会用到发布订阅模式，在vue中我们使用自定义事件的时候也会应用到发布订阅模式</p>
+<pre><code>&lt;!--父组件--&gt;
+&lt;my-component v-on:my-event=&quot;doSomething&quot;&gt;&lt;/my-component&gt;
+
+// MyComponent组件
+methods: {
+  fn() {
+    this.$emit('my-event',data)
+  }
+}
+</code></pre>
+<p>了解eventhub之后,我们根据已知的api 来实现 eventhub</p>
+<pre><code>eventHub.on()   // 订阅
+eventHub.emit() // 发布
+eventHub.off()  // 取消订阅
+</code></pre>
+<pre><code class="language-JavaScript">class EventHub {
+  private cache: { [key: string]: Array&lt;(data: unknown) =&gt; void&gt; } = {};
+
+  on(eventName: string, fn: (data: unknown) =&gt; void) {
+    this.cache[eventName] = this.cache[eventName] || [];
+    this.cache[eventName].push(fn);
+  }
+
+  emit(eventName: string, data?: unknown) {
+    (this.cache[eventName] || []).forEach(fn =&gt; fn(data));
+  }
+
+  off(eventName: string, fn: (data: unknown) =&gt; void) {
+    this.cache[eventName] = this.cache[eventName] || [];
+    let index = indexOf(this.cache[eventName], fn);
+    if (index === -1) return;
+    this.cache[eventName].splice(index, 1);
+  }
+}
+
+export default EventHub;
+
+/**
+ * 帮助函数 indexOf
+ * @param array
+ * @param item
+ * */
+function indexOf(array, item) {
+  if (array === undefined) {
+    return -1
+  }
+  let index = -1;
+  for (let i = 0; i &lt; array.length; i++) {
+    if (array[i] === item) {
+      index = i;
+      break
+    }
+  }
+  return index;
+}
+</code></pre>
 
               </div>
               <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
-</ul>
-</li>
-</ul>
-
+                
               </div>
             </div>
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://kiss-me-quickly.github.io/post/shou-xie-bind/">
+              <h3 class="post-title">
+                手写bind
+              </h3>
+            </a>
+          </div>
         
 
         

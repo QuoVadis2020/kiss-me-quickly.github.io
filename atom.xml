@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kiss-me-quickly.github.io/</id>
     <title>mirror</title>
-    <updated>2020-03-15T14:10:26.024Z</updated>
+    <updated>2020-03-16T03:16:26.451Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kiss-me-quickly.github.io/"/>
     <link rel="self" href="https://kiss-me-quickly.github.io/atom.xml"/>
@@ -10,6 +10,79 @@
     <logo>https://kiss-me-quickly.github.io/images/avatar.png</logo>
     <icon>https://kiss-me-quickly.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, mirror</rights>
+    <entry>
+        <title type="html"><![CDATA[Eventhub]]></title>
+        <id>https://kiss-me-quickly.github.io/post/eventhub/</id>
+        <link href="https://kiss-me-quickly.github.io/post/eventhub/">
+        </link>
+        <updated>2019-11-19T01:55:23.000Z</updated>
+        <content type="html"><![CDATA[<pre><code class="language-javascript">const ele = document.getElementById('selector')
+ele.addEventListener('click',() =&gt; console.log('click'))
+// 可以订阅多个相同事件
+ele.addEventListener('click',() =&gt; console.log('click2'))
+// 可以取消订阅，这里必须要使用与订阅时相同的函数
+ele.removeEventListener('click',handler)
+</code></pre>
+<p>上边的代码其实就是发布订阅模式，我们可以订阅DOM元素的一些事件，当用户执行相应的操作时会发布事件。当然我们也可以手动来取消对事件的订阅。</p>
+<p>不仅仅在操作DOM的时候我们会用到发布订阅模式，在vue中我们使用自定义事件的时候也会应用到发布订阅模式</p>
+<pre><code>&lt;!--父组件--&gt;
+&lt;my-component v-on:my-event=&quot;doSomething&quot;&gt;&lt;/my-component&gt;
+
+// MyComponent组件
+methods: {
+  fn() {
+    this.$emit('my-event',data)
+  }
+}
+</code></pre>
+<p>了解eventhub之后,我们根据已知的api 来实现 eventhub</p>
+<pre><code>eventHub.on()   // 订阅
+eventHub.emit() // 发布
+eventHub.off()  // 取消订阅
+</code></pre>
+<pre><code class="language-JavaScript">class EventHub {
+  private cache: { [key: string]: Array&lt;(data: unknown) =&gt; void&gt; } = {};
+
+  on(eventName: string, fn: (data: unknown) =&gt; void) {
+    this.cache[eventName] = this.cache[eventName] || [];
+    this.cache[eventName].push(fn);
+  }
+
+  emit(eventName: string, data?: unknown) {
+    (this.cache[eventName] || []).forEach(fn =&gt; fn(data));
+  }
+
+  off(eventName: string, fn: (data: unknown) =&gt; void) {
+    this.cache[eventName] = this.cache[eventName] || [];
+    let index = indexOf(this.cache[eventName], fn);
+    if (index === -1) return;
+    this.cache[eventName].splice(index, 1);
+  }
+}
+
+export default EventHub;
+
+/**
+ * 帮助函数 indexOf
+ * @param array
+ * @param item
+ * */
+function indexOf(array, item) {
+  if (array === undefined) {
+    return -1
+  }
+  let index = -1;
+  for (let i = 0; i &lt; array.length; i++) {
+    if (array[i] === item) {
+      index = i;
+      break
+    }
+  }
+  return index;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[手写bind]]></title>
         <id>https://kiss-me-quickly.github.io/post/shou-xie-bind/</id>
